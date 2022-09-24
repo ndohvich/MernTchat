@@ -11,7 +11,7 @@ function Home() {
           <h1>Share the Word with your friends</h1>
           <p>Chat App lets you connect with the world</p>
           <LinkContainer to="/chat">
-            <Button variant="success">
+            <Button variant="danger">
               Get Started  <i className="fa fa-comments home-message-icon"></i>
             </Button>
           </LinkContainer>
