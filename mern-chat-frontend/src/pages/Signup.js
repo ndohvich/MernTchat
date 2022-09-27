@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from 'react'
+import React, { useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Col, Row, Container } from "react-bootstrap";
@@ -8,38 +8,64 @@ import "./Signup.css";
 import botImg from "../assets/bot.jpg";
 
 function Signup() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+
+  //image upload states
+  const [image, setImage] = useState(null);
+  const [uploadingImg, setUploadingImg] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  function validateImg(e){
+    const file = e.target.files[0];
+    if(file.size >= 1048576){
+      return alert("Max file size is 1 Mo");
+    }
+    else{
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file))
+    }
+  }
+
+  function handleSignup(e){
+    e.preventDefault();
+  }
+
   return (
     <Container>
       <Row>
           <Col md={7} className="d-flex align-items-center justify-content-center flex-direction-column">
-            <Form>
-              <h1 className="text-center">Create Account</h1>
+            <Form onSubmit={handleSignup}>
               <div className="signup-profile-pic__container">
-                <img src="{ botImg }" class="signup-profile-pic"/>
-                <label htmlFor="image-upload" className="image-upload-label"></label>
+                <img src={ imagePreview || botImg } class="signup-profile-pic"/>
+                <label htmlFor="image-upload" className="image-upload-label">
                   <i className="fa fa-plus-circle add-picture-icon"></i>
+                </label>
+                <input type="file" id="image-upload" hidden accept="image/png, image/jpeg" onChange={validateImg} />
               </div>
+              <h1 className="text-center">Create Account</h1>
               <Form.Group className="mb-3" controlId="formBasicName">
                 <Form.Label>Name</Form.Label>
-                <Form.Control type="text" placeholder="Your Name" />
+                <Form.Control type="text" placeholder="Your Name" onChange={(e) => setName(e.target.value)} value={name} />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" />
+                <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} value={email} />
                 <Form.Text className="text-muted">
                   We'll never share your email with anyone else.
                 </Form.Text>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" />
+                <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
               </Form.Group>
               <Button variant="success" type="submit">
-                Signup
+                Create Account
               </Button>
               <div className="py-4">
                 <p className="text-center">
-                  I have an account ? <Link to="/login">Login</Link>
+                  Already have an account ? <Link to="/login">Login</Link>
                 </p>
               </div>
             </Form>
