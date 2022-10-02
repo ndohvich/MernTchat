@@ -28,8 +28,30 @@ function Signup() {
     }
   }
 
-  function handleSignup(e){
+  async function uploadImage(){
+    const data = new FormData();
+    data.append('file', image);
+    data.append('upload_preset', 'dtjkdhoh');
+    try{
+      setUploadingImg(true);
+      let res = await fetch('https://api.cloudinary.com/v1_1/learn-code-10/image/upload', {
+        methode: 'POST',
+        body: data,
+      })
+      const urlData = await res.json();
+      setUploadingImg(false);
+      return urlData.url
+    } catch(error) {
+      setUploadingImg(false);
+      console.log(error);
+    }
+  }
+
+  async function handleSignup(e){
     e.preventDefault();
+    if(!image) return alert('Please upload your profile picture');
+    const url = await uploadImage(image);
+    console.log(url);
   }
 
   return (
